@@ -11,9 +11,11 @@
  * @author Scott Walkinshaw <scott.walkinshaw@gmail.com>
  */
 function roots_root_relative_url($input) {
-  preg_match('|https?://([^/]+)(/.*)|i', $input, $matches);
+  preg_match('|https?://([^/]+)()(/.*)|i', $input, $matches);
 
-  if (isset($matches[1]) && isset($matches[2]) && $matches[1] === $_SERVER['SERVER_NAME']) {
+  if (!isset($matches[1]) || !isset($matches[2])) {
+    return $input; 
+  } elseif (($matches[1] === $server_name) || $matches[1] === $server_name . ':' . $_SERVER['SERVER_PORT']) {
     return wp_make_link_relative($input);
   } else {
     return $input;
